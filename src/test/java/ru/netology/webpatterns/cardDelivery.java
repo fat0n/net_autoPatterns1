@@ -1,13 +1,11 @@
 package ru.netology.webpatterns;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-
-
-
 
 import java.time.Duration;
 
@@ -36,16 +34,14 @@ void setup() {
         $("[data-test-id='phone'] input").setValue(validUser.getPhone());
         $("[data-test-id='agreement']").click();
         $(byText("Запланировать")).click();
-        $(byText("Успешно")).shouldBe(Condition.visible, Duration.ofSeconds(15));
-        $("[data-test-id='success-notification'].notification__content")
-                .shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
+        $(byText("Успешно!")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+        $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $(byText("Запланировать")).click();
-        $("[data-test-id='success-notification'].notification__content")
-                .shouldHave(Condition.exactText("У вас уже запланирована встреча на другую дату. Перепланировать?"));
+        $("[data-test-id='replan-notification'] .notification__content").shouldHave(Condition.text("У вас уже запланирована встреча на другую дату. Перепланировать?"));
         $("[data-test-id='replan-notification'] button").click();
-        $("[data-test-id='success-notification'].notification__content")
+        $("[data-test-id='success-notification'] .notification__content")
                 .shouldHave(Condition.exactText("Встреча успешно запланирована на " + secondMeetingDate));
     }
 
